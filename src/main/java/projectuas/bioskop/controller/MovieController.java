@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import projectuas.bioskop.model.Studio;
 import projectuas.bioskop.service.MovieService;
 import projectuas.bioskop.model.Movie;
 
@@ -51,5 +52,27 @@ public class MovieController {
     @GetMapping("/{id}")
     public ResponseEntity<Optional<Movie>> getMovie(@PathVariable ObjectId id) {
         return new ResponseEntity<Optional<Movie>>(movieService.singleMovie(id), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteMovie(@PathVariable ObjectId id) {
+        if (movieService.deleteMovieById(id)) {
+            return new ResponseEntity<>("Data telah dihapus", HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>("Data tidak ditemukan", HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Movie> updateMovie(@PathVariable ObjectId id, @RequestBody Movie updatedMovie) {
+        updatedMovie.setId(id);
+
+        boolean updated = movieService.updateMovie(updatedMovie);
+
+        if (updated) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 import projectuas.bioskop.model.Movie;
+import projectuas.bioskop.model.Studio;
 import projectuas.bioskop.repository.MovieRepository;
 
 import java.time.LocalDate;
@@ -56,5 +57,38 @@ public class MovieService {
 
     public Optional<Movie> singleMovie(ObjectId id) {
         return movieRepository.findById(id);
+    }
+
+    public boolean deleteMovieById(ObjectId id) {
+        Optional<Movie> movie = movieRepository.findById(id);
+        if (movie.isPresent()) {
+            movieRepository.deleteById(id);
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean updateMovie(Movie updatedMovie) {
+        Optional<Movie> existingMovie = movieRepository.findById(updatedMovie.getId());
+
+        if (existingMovie.isPresent()) {
+            Movie movie = existingMovie.get();
+            movie.setTitle(updatedMovie.getTitle());
+            movie.setDescription(updatedMovie.getDescription());
+            movie.setDurationHour(updatedMovie.getDurationHour());
+            movie.setDurationMinute(updatedMovie.getDurationMinute());
+            movie.setReleaseDate(updatedMovie.getReleaseDate());
+            movie.setTrailerLink(updatedMovie.getTrailerLink());
+            movie.setPoster(updatedMovie.getPoster());
+            movie.setGenres(updatedMovie.getGenres());
+            movie.setBackdrops(updatedMovie.getGenres());
+            movie.setPrice(updatedMovie.getPrice());
+
+            movieRepository.save(movie);
+            return true;
+        } else {
+            return false;
+        }
     }
 }

@@ -42,9 +42,9 @@ public class StudioService {
         if (studio.isPresent()) {
             studioRepository.deleteById(id);
             return true;
+        } else {
+            return false;
         }
-
-        return false;
     }
 
     public boolean updateStudio(Studio updatedStudio) {

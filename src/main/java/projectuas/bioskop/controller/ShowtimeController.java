@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import projectuas.bioskop.model.Movie;
 import projectuas.bioskop.model.Showtime;
 import projectuas.bioskop.service.ShowtimeService;
 
@@ -43,6 +44,25 @@ public class ShowtimeController {
         return new ResponseEntity<Optional<Showtime>>(showtimeService.singleShowtime(id), HttpStatus.OK);
     }
 
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<Void>
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteShowtime(@PathVariable ObjectId id) {
+        if (showtimeService.deleteShowtimeById(id)) {
+            return new ResponseEntity<>("Data telah dihapus", HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>("Data tidak ditemukan", HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Showtime> updateShowtime(@PathVariable ObjectId id, @RequestBody Showtime updatedShowtime) {
+        updatedShowtime.setId(id);
+
+        boolean updated = showtimeService.updateShowtime(updatedShowtime);
+
+        if (updated) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 }

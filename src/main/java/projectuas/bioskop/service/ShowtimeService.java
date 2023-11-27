@@ -57,4 +57,30 @@ public class ShowtimeService {
     public Optional<Showtime> singleShowtime(ObjectId id) {
         return showtimeRepository.findById(id);
     }
+
+    public boolean deleteShowtimeById(ObjectId id) {
+        Optional<Showtime> showtime = showtimeRepository.findById(id);
+        if (showtime.isPresent()) {
+            showtimeRepository.deleteById(id);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean updateShowtime(Showtime updatedShowtime) {
+        Optional<Showtime> existingShowtime = showtimeRepository.findById(updatedShowtime.getId());
+
+        if (existingShowtime.isPresent()) {
+            Showtime showtime = existingShowtime.get();
+            showtime.setDateTime(updatedShowtime.getDateTime());
+            showtime.setMovieId(updatedShowtime.getMovieId());
+            showtime.setStudioId(updatedShowtime.getStudioId());
+
+            showtimeRepository.save(showtime);
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
