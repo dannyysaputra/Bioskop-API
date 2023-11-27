@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Document(collection = "showtime")
 @Data
@@ -17,9 +18,13 @@ import java.time.LocalDateTime;
 public class Showtime {
     @Id
     private ObjectId id;
-    private LocalDateTime date_time;
-    @DocumentReference
-    private String movie_id;
-    @DocumentReference
-    private String studio_id;
+    private LocalDateTime dateTime;
+    private ObjectId movieId;
+    private ObjectId studioId;
+
+    public Showtime(LocalDateTime dateTime, ObjectId movieId, ObjectId studioId) {
+        this.dateTime = dateTime;
+        this.movieId = movieId;
+        this.studioId = studioId;
+    }
 }
